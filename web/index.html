@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/vf-logo.png" />
+    <title>V-Fletch · Office Intelligence</title>
+    <style>
+      /* 启动期窗口底色，防止 React 接管前的白闪 */
+      html, body { background: #f5f6f8; margin: 0; }
+
+      /* ---- 启动加载遮罩（Codex 风格，直接用原始 PNG） ---- */
+      #vf-splash {
+        position: fixed; inset: 0; z-index: 9999;
+        background: #f5f6f8;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 22px;
+        transition: opacity .42s ease;
+        opacity: 1;
+      }
+      #vf-splash.vf-splash--hidden { opacity: 0; pointer-events: none; }
+      #vf-splash .vf-splash-logo {
+        width: 96px; height: 96px;
+        animation: vf-breathe 2.6s ease-in-out infinite;
+      }
+      #vf-splash .vf-splash-logo img {
+        width: 100%; height: 100%;
+        display: block; border-radius: 50%;
+        animation: vf-spin 18s linear infinite;
+        transform-origin: 50% 50%;
+      }
+      #vf-splash .vf-splash-name {
+        font-family: Georgia, "Times New Roman", "Songti SC", STSong, SimSun, serif;
+        color: #0d3a6b;
+        font-size: 17px; letter-spacing: 1.6px;
+      }
+      #vf-splash .vf-splash-tag {
+        font-size: 10.5px; color: #6b7688;
+        letter-spacing: 1.6px; text-transform: uppercase;
+        margin-top: -8px;
+      }
+      #vf-splash .vf-splash-bar {
+        width: 96px; height: 2px;
+        background: rgba(13, 58, 107, 0.12);
+        position: relative; overflow: hidden;
+        margin-top: 4px;
+      }
+      #vf-splash .vf-splash-bar::after {
+        content: ""; position: absolute; inset: 0;
+        background: #0d3a6b;
+        transform-origin: 0 50%;
+        animation: vf-slide 1.6s ease-in-out infinite;
+      }
+      @keyframes vf-spin { to { transform: rotate(360deg); } }
+      @keyframes vf-breathe {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.04); }
+      }
+      @keyframes vf-slide {
+        0% { transform: translateX(-100%) scaleX(0.2); }
+        50% { transform: translateX(0) scaleX(1); }
+        100% { transform: translateX(100%) scaleX(0.2); }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 启动遮罩：直接用用户提供的原始 PNG，容器呼吸 + 内部旋转 -->
+    <div id="vf-splash" aria-label="Loading V-Fletch">
+      <div class="vf-splash-logo">
+        <img src="/vf-logo.png" alt="V-Fletch" draggable="false" />
+      </div>
+      <div class="vf-splash-name">V‑Fletch</div>
+      <div class="vf-splash-tag">Office Intelligence</div>
+      <div class="vf-splash-bar" aria-hidden="true"></div>
+    </div>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script>
+      // 加载完成（首屏 React 接管 + 短暂展示）后渐隐移除 splash
+      function hideSplash() {
+        var s = document.getElementById('vf-splash');
+        if (!s || s.classList.contains('vf-splash--hidden')) return;
+        s.classList.add('vf-splash--hidden');
+        setTimeout(function () { if (s && s.parentNode) s.parentNode.removeChild(s); }, 480);
+      }
+      window.addEventListener('load', function () { setTimeout(hideSplash, 320); });
+      // 兜底：防止某个错误导致 splash 永久停留
+      setTimeout(hideSplash, 5000);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "node_version": "22.5",
+  "graphs": {
+    "chat": "./server/lib/studio-graph.mjs#graph"
+  },
+  "env": ".env"
+}

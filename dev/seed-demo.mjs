@@ -1,0 +1,13 @@
+import { api, login } from "./testlib.mjs";
+const { token: T } = await login("central", (process.env.VF_BOSS_P ?? "vfletch-dev"));
+let r = await api("POST", "/api/admin/users", { token: T, body: { username: "demo_fin", password: "demo123456", display_name: "财务小李", role: "employee" } });
+const u = r.data.id ? r.data : (await api("GET", "/api/admin/users", { token: T })).data.find((x) => x.username === "demo_fin");
+await api("POST", `/api/admin/users/${u.id}/department`, { token: T, body: { department: "财务部" } });
+const emp = await login("demo_fin", "demo123456");
+const audit = (await api("GET", "/api/audit/overview", { token: emp.token })).data;
+const otherIdx = audit.employees.findIndex((e) => e.department && e.department !== "财务部");
+r = await api("PUT", "/api/audit/record", { token: emp.token, body: { key: "employees", action: "update", index: otherIdx, patch: { position: "申请修改的岗位" } } });
+console.log("pending:", r.data);
+r = await api("POST", "/api/kb", { token: T, body: { title: "差旅报销制度（示例）", content: "差旅需 3 日内提交报销单", tags: ["制度"] } });
+await api("DELETE", `/api/kb/${r.data.id}`, { token: T });
+console.log("archived kb:", r.data.id);

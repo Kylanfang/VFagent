@@ -1,0 +1,2084 @@
+{
+  "_meta": {
+    "source": "提炼自 <WORKSPACE>/Audit/audit-system 的 src/data（esbuild 自动提取）",
+    "updatedAt": "2026-09-07T14:03:54.568Z",
+    "files": [
+      "system.ts",
+      "audit.ts",
+      "workflow.ts",
+      "humanResource.ts",
+      "ai.ts"
+    ]
+  },
+  "accountChanges": [
+    {
+      "id": "CHG-001",
+      "accountId": "ACC-002",
+      "username": "lina",
+      "changeType": "permission",
+      "oldValue": "高权限",
+      "newValue": "中权限",
+      "status": "pending",
+      "createdAt": "2024-06-29",
+      "operator": "王强"
+    }
+  ],
+  "accountRequests": [
+    {
+      "id": "REQ-001",
+      "employeeId": "EMP-1024",
+      "employeeName": "赵雪",
+      "department": "财务部",
+      "position": "会计",
+      "requestedPermissions": [
+        "财务查询",
+        "报表导出"
+      ],
+      "status": "pending",
+      "createdAt": "2024-06-30",
+      "processNodes": [
+        {
+          "nodeName": "提交申请",
+          "assignee": "赵雪",
+          "status": "completed",
+          "completedAt": "2024-06-30"
+        },
+        {
+          "nodeName": "部门审批",
+          "assignee": "张伟",
+          "status": "current"
+        },
+        {
+          "nodeName": "IT审核",
+          "assignee": "王强",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "REQ-002",
+      "employeeId": "EMP-1025",
+      "employeeName": "孙磊",
+      "department": "运营部",
+      "position": "运营专员",
+      "requestedPermissions": [
+        "数据查看",
+        "活动管理"
+      ],
+      "status": "processing",
+      "createdAt": "2024-06-28",
+      "processNodes": [
+        {
+          "nodeName": "提交申请",
+          "assignee": "孙磊",
+          "status": "completed",
+          "completedAt": "2024-06-28"
+        },
+        {
+          "nodeName": "部门审批",
+          "assignee": "朱红",
+          "status": "completed",
+          "completedAt": "2024-06-29"
+        },
+        {
+          "nodeName": "IT审核",
+          "assignee": "王强",
+          "status": "current"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "id": "ACC-001",
+      "username": "zhangwei",
+      "name": "张伟",
+      "department": "财务部",
+      "position": "财务经理",
+      "permissionLevel": "high",
+      "riskLevel": "normal",
+      "createdAt": "2023-01-15",
+      "status": "active"
+    },
+    {
+      "id": "ACC-002",
+      "username": "lina",
+      "name": "李娜",
+      "department": "人力资源部",
+      "position": "HR专员",
+      "permissionLevel": "medium",
+      "riskLevel": "medium",
+      "riskType": "权限过高",
+      "createdAt": "2023-03-20",
+      "status": "active"
+    },
+    {
+      "id": "ACC-003",
+      "username": "wangqiang",
+      "name": "王强",
+      "department": "技术部",
+      "position": "系统管理员",
+      "permissionLevel": "high",
+      "riskLevel": "normal",
+      "createdAt": "2022-06-10",
+      "status": "active"
+    },
+    {
+      "id": "ACC-004",
+      "username": "zhuhong",
+      "name": "朱红",
+      "department": "运营部",
+      "position": "运营主管",
+      "permissionLevel": "medium",
+      "riskLevel": "low",
+      "createdAt": "2023-04-05",
+      "status": "active"
+    },
+    {
+      "id": "ACC-005",
+      "username": "chenjie",
+      "name": "陈杰",
+      "department": "市场部",
+      "position": "销售经理",
+      "permissionLevel": "medium",
+      "riskLevel": "high",
+      "riskType": "越权访问",
+      "createdAt": "2023-02-28",
+      "status": "active"
+    }
+  ],
+  "anomalyRecords": [
+    {
+      "id": "ANO-001",
+      "type": "login",
+      "anomalyType": "异地登录",
+      "time": "2024-06-30 02:15:30",
+      "target": "wangqiang",
+      "department": "技术部",
+      "riskLevel": "high",
+      "summary": "系统管理员账号从境外IP登录",
+      "details": "登录IP: 198.51.100.12, 登录地点: 美国"
+    },
+    {
+      "id": "ANO-002",
+      "type": "transaction",
+      "anomalyType": "大额转账",
+      "time": "2024-06-29 14:30:00",
+      "target": "ERP系统",
+      "department": "财务部",
+      "riskLevel": "high",
+      "summary": "检测到500万元异常转账",
+      "details": "收款方: XX科技有限公司(非合作供应商)"
+    },
+    {
+      "id": "ANO-003",
+      "type": "access",
+      "anomalyType": "越权访问",
+      "time": "2024-06-28 09:45:20",
+      "target": "客户数据",
+      "department": "市场部",
+      "riskLevel": "medium",
+      "summary": "销售员工访问非负责区域数据",
+      "details": "访问员工: 陈杰, 访问区域: 华东区(负责华南区)"
+    }
+  ],
+  "dashboardStats": {
+    "totalRisks": 130,
+    "pendingTickets": 35,
+    "accountHealth": 94.5,
+    "transactionAnomalyRate": 2.3
+  },
+  "departmentRisk": [
+    {
+      "department": "财务部",
+      "riskCount": 45,
+      "rank": 1
+    },
+    {
+      "department": "人力资源部",
+      "riskCount": 32,
+      "rank": 2
+    },
+    {
+      "department": "运营部",
+      "riskCount": 28,
+      "rank": 3
+    },
+    {
+      "department": "技术部",
+      "riskCount": 15,
+      "rank": 4
+    },
+    {
+      "department": "市场部",
+      "riskCount": 8,
+      "rank": 5
+    }
+  ],
+  "departureAccounts": [
+    {
+      "id": "DEP-001",
+      "employeeId": "EMP-0987",
+      "employeeName": "刘洋",
+      "department": "技术部",
+      "departureDate": "2024-06-25",
+      "accountStatus": "checking",
+      "systems": [
+        {
+          "systemName": "ERP系统",
+          "username": "liuyang",
+          "status": "disabled",
+          "lastCheckedAt": "2024-06-25"
+        },
+        {
+          "systemName": "运维平台",
+          "username": "liuyang",
+          "status": "active"
+        },
+        {
+          "systemName": "代码仓库",
+          "username": "liuyang",
+          "status": "disabled",
+          "lastCheckedAt": "2024-06-25"
+        }
+      ]
+    }
+  ],
+  "highRiskAlerts": [
+    {
+      "id": "ALT-001",
+      "title": "大额资金异常转移",
+      "type": "交易异常",
+      "level": "high",
+      "department": "财务部",
+      "createdAt": "2024-06-30",
+      "status": "待整改",
+      "description": "检测到一笔金额为500万元的资金异常转移，收款方为非合作供应商"
+    },
+    {
+      "id": "ALT-002",
+      "title": "高级权限账号异常登录",
+      "type": "登录异常",
+      "level": "high",
+      "department": "技术部",
+      "createdAt": "2024-06-29",
+      "status": "整改中",
+      "description": "系统管理员账号在非工作时间从境外IP登录"
+    },
+    {
+      "id": "ALT-003",
+      "title": "员工账号权限过高",
+      "type": "权限异常",
+      "level": "medium",
+      "department": "人力资源部",
+      "createdAt": "2024-06-28",
+      "status": "待复查",
+      "description": "发现3名普通员工拥有超出其岗位职责的系统权限"
+    },
+    {
+      "id": "ALT-004",
+      "title": "离职员工账号未及时注销",
+      "type": "账号风险",
+      "level": "medium",
+      "department": "运营部",
+      "createdAt": "2024-06-27",
+      "status": "待整改",
+      "description": "5名已离职员工的系统账号仍处于活跃状态"
+    },
+    {
+      "id": "ALT-005",
+      "title": "越权访问客户数据",
+      "type": "越权访问",
+      "level": "high",
+      "department": "市场部",
+      "createdAt": "2024-06-26",
+      "status": "已销号",
+      "description": "销售员工访问了非负责区域的客户敏感数据"
+    }
+  ],
+  "modelConfigs": [
+    {
+      "id": "MODEL-001",
+      "name": "风控检测模型V2",
+      "apiUrl": "https://api.example.com/model/risk-detection",
+      "modelId": "risk-detection-v2",
+      "apiKey": "***",
+      "isDefault": true,
+      "status": "connected"
+    },
+    {
+      "id": "MODEL-002",
+      "name": "异常交易识别模型",
+      "apiUrl": "https://api.example.com/model/transaction-anomaly",
+      "modelId": "transaction-anomaly-v1",
+      "apiKey": "***",
+      "isDefault": false,
+      "status": "connected"
+    }
+  ],
+  "permissionMappings": [
+    {
+      "permissionName": "财务系统管理员",
+      "permissionLevel": "high",
+      "approver": "财务总监",
+      "responsiblePerson": "张伟",
+      "department": "财务部",
+      "system": "ERP系统"
+    },
+    {
+      "permissionName": "员工信息管理",
+      "permissionLevel": "medium",
+      "approver": "HR经理",
+      "responsiblePerson": "李娜",
+      "department": "人力资源部",
+      "system": "HR系统"
+    },
+    {
+      "permissionName": "系统配置管理",
+      "permissionLevel": "high",
+      "approver": "CTO",
+      "responsiblePerson": "王强",
+      "department": "技术部",
+      "system": "运维平台"
+    }
+  ],
+  "reconResult": {
+    "id": "RECON-202406",
+    "reconDate": "2024-06-30",
+    "totalEmployees": 1256,
+    "totalAccounts": 3248,
+    "orphanAccounts": [
+      {
+        "username": "old_user_01",
+        "system": "旧ERP系统",
+        "lastLogin": "2023-01-15"
+      },
+      {
+        "username": "test_account",
+        "system": "测试环境",
+        "lastLogin": "2024-03-20"
+      }
+    ],
+    "multiAccountUsers": [
+      {
+        "employeeId": "EMP-0001",
+        "employeeName": "张伟",
+        "accounts": [
+          "zhangwei",
+          "zhangwei_test"
+        ]
+      }
+    ],
+    "unassignedAccounts": [
+      {
+        "username": "temp_contractor",
+        "system": "合同系统",
+        "createdAt": "2024-01-10"
+      }
+    ]
+  },
+  "riskDistribution": [
+    {
+      "type": "权限异常",
+      "count": 45,
+      "percentage": 35.2
+    },
+    {
+      "type": "账号风险",
+      "count": 32,
+      "percentage": 25
+    },
+    {
+      "type": "交易异常",
+      "count": 28,
+      "percentage": 21.9
+    },
+    {
+      "type": "越权访问",
+      "count": 15,
+      "percentage": 11.7
+    },
+    {
+      "type": "登录异常",
+      "count": 5,
+      "percentage": 3.9
+    },
+    {
+      "type": "数据泄露",
+      "count": 2,
+      "percentage": 1.6
+    },
+    {
+      "type": "合规风险",
+      "count": 1,
+      "percentage": 0.8
+    }
+  ],
+  "riskTrend": [
+    {
+      "date": "06-01",
+      "count": 15
+    },
+    {
+      "date": "06-05",
+      "count": 12
+    },
+    {
+      "date": "06-10",
+      "count": 18
+    },
+    {
+      "date": "06-15",
+      "count": 14
+    },
+    {
+      "date": "06-20",
+      "count": 22
+    },
+    {
+      "date": "06-25",
+      "count": 19
+    },
+    {
+      "date": "06-30",
+      "count": 28
+    }
+  ],
+  "ruleConfigs": [
+    {
+      "id": "RULE-001",
+      "name": "大额交易监控",
+      "type": "transaction",
+      "threshold": 1000000,
+      "description": "单笔交易金额超过100万触发警报",
+      "enabled": true
+    },
+    {
+      "id": "RULE-002",
+      "name": "权限变更监控",
+      "type": "permission",
+      "threshold": 5,
+      "description": "单用户权限变更次数超过5次触发警报",
+      "enabled": true
+    },
+    {
+      "id": "RULE-003",
+      "name": "异常登录监控",
+      "type": "login",
+      "threshold": 3,
+      "description": "同一账号短时间内登录失败超过3次触发警报",
+      "enabled": true
+    }
+  ],
+  "systemLogs": [
+    {
+      "id": "LOG-001",
+      "userId": "ACC-003",
+      "username": "王强",
+      "action": "登录系统",
+      "module": "系统管理",
+      "operatedAt": "2024-06-30 09:00:00",
+      "details": "管理员登录",
+      "ipAddress": "192.168.1.100"
+    },
+    {
+      "id": "LOG-002",
+      "userId": "ACC-001",
+      "username": "张伟",
+      "action": "审批权限申请",
+      "module": "权限管理",
+      "operatedAt": "2024-06-30 09:15:00",
+      "details": "批准赵雪的权限申请",
+      "ipAddress": "192.168.1.101"
+    },
+    {
+      "id": "LOG-003",
+      "userId": "ACC-003",
+      "username": "王强",
+      "action": "修改规则配置",
+      "module": "规则管理",
+      "operatedAt": "2024-06-30 10:00:00",
+      "details": "更新大额交易监控阈值",
+      "ipAddress": "192.168.1.100"
+    }
+  ],
+  "auditTasks": [
+    {
+      "id": "TASK-001",
+      "name": "2024年度财务审计",
+      "type": "annual_plan",
+      "status": "fieldwork",
+      "department": "财务部",
+      "businessLine": "财务",
+      "riskDimension": "财务报告",
+      "assignee": "审计员A",
+      "createdAt": "2024-01-01",
+      "deadline": "2024-06-30",
+      "progress": 65,
+      "samplingConfig": {
+        "method": "stratified",
+        "populationSize": 1000,
+        "sampleSize": 100,
+        "confidenceLevel": 95,
+        "stratificationFields": [
+          "金额",
+          "类型"
+        ]
+      },
+      "samplingResults": [
+        {
+          "id": "SMP-001",
+          "sampleNumber": 1,
+          "itemId": "INV-001",
+          "itemName": "采购发票",
+          "status": "normal",
+          "selectedAt": "2024-06-15"
+        },
+        {
+          "id": "SMP-002",
+          "sampleNumber": 2,
+          "itemId": "INV-002",
+          "itemName": "销售发票",
+          "status": "anomaly",
+          "anomalyDescription": "发票号码重复",
+          "selectedAt": "2024-06-16"
+        }
+      ],
+      "findings": [
+        {
+          "id": "FIND-001",
+          "title": "发票验证不充分",
+          "severity": "medium",
+          "description": "部分发票未经过严格验证",
+          "recommendation": "建立发票验证机制",
+          "createdAt": "2024-06-20",
+          "status": "pending"
+        }
+      ],
+      "operationLogs": [
+        {
+          "id": "OP-001",
+          "action": "创建任务",
+          "operator": "管理员",
+          "operatedAt": "2024-01-01",
+          "details": "创建年度财务审计任务"
+        },
+        {
+          "id": "OP-002",
+          "action": "分配任务",
+          "operator": "管理员",
+          "operatedAt": "2024-01-05",
+          "details": "分配给审计员A"
+        }
+      ]
+    },
+    {
+      "id": "TASK-002",
+      "name": "信息技术安全专项审计",
+      "type": "special",
+      "status": "sampling",
+      "department": "技术部",
+      "businessLine": "IT",
+      "riskDimension": "信息安全",
+      "assignee": "审计员B",
+      "createdAt": "2024-04-01",
+      "deadline": "2024-07-31",
+      "progress": 30,
+      "operationLogs": [
+        {
+          "id": "OP-003",
+          "action": "创建任务",
+          "operator": "管理员",
+          "operatedAt": "2024-04-01",
+          "details": "创建IT安全专项审计任务"
+        }
+      ]
+    }
+  ],
+  "complianceCheckResults": [
+    {
+      "id": "CCR-001",
+      "ruleId": "CR-001",
+      "ruleTitle": "收入确认原则",
+      "scenario": "收入确认时点",
+      "checkResult": "compliant",
+      "checkTime": "2024-06-20",
+      "taskId": "TASK-001"
+    },
+    {
+      "id": "CCR-002",
+      "ruleId": "CR-002",
+      "ruleTitle": "访问控制",
+      "scenario": "权限管理",
+      "checkResult": "non_compliant",
+      "deviationDetails": "发现5个冗余账号",
+      "affectedData": "用户账号数据",
+      "checkTime": "2024-06-18"
+    }
+  ],
+  "complianceGaps": [
+    {
+      "id": "CG-001",
+      "ruleId": "CR-002",
+      "ruleTitle": "访问控制",
+      "category": "internal_control",
+      "gapDescription": "用户账号权限管理存在漏洞",
+      "affectedArea": "IT系统",
+      "severity": "medium",
+      "recommendedAction": "建立定期账号审计机制",
+      "status": "open"
+    }
+  ],
+  "complianceRules": [
+    {
+      "id": "CR-001",
+      "code": "GAAP-001",
+      "title": "收入确认原则",
+      "category": "finance",
+      "content": "收入应在货物交付或服务完成时确认",
+      "source": "企业会计准则第14号",
+      "effectiveDate": "2018-01-01",
+      "status": "effective",
+      "auditScenarios": [
+        "收入确认时点",
+        "跨期收入"
+      ],
+      "keywords": [
+        "收入",
+        "确认",
+        "时点"
+      ]
+    },
+    {
+      "id": "CR-002",
+      "code": "SOC2-001",
+      "title": "访问控制",
+      "category": "internal_control",
+      "content": "所有系统访问必须经过授权和验证",
+      "source": "SOC 2 Type II",
+      "effectiveDate": "2020-01-01",
+      "status": "effective",
+      "auditScenarios": [
+        "权限管理",
+        "账号审计"
+      ],
+      "keywords": [
+        "访问",
+        "控制",
+        "权限"
+      ]
+    }
+  ],
+  "evidences": [
+    {
+      "id": "EVID-001",
+      "name": "采购发票扫描件",
+      "type": "voucher",
+      "fileUrl": "/files/invoice-001.pdf",
+      "fileSize": 2048000,
+      "taskId": "TASK-001",
+      "uploadedBy": "审计员A",
+      "uploadedAt": "2024-06-15",
+      "verified": true
+    },
+    {
+      "id": "EVID-002",
+      "name": "合同副本",
+      "type": "contract",
+      "fileUrl": "/files/contract-001.pdf",
+      "fileSize": 1024000,
+      "taskId": "TASK-001",
+      "uploadedBy": "审计员A",
+      "uploadedAt": "2024-06-16",
+      "verified": true
+    }
+  ],
+  "workPaperTemplates": [
+    {
+      "id": "TPL-001",
+      "name": "财务凭证检查表",
+      "type": "financial",
+      "description": "用于检查财务凭证真实性和完整性",
+      "sections": [
+        {
+          "id": "SEC-001",
+          "title": "基本信息",
+          "order": 1
+        },
+        {
+          "id": "SEC-002",
+          "title": "检查内容",
+          "order": 2
+        },
+        {
+          "id": "SEC-003",
+          "title": "发现问题",
+          "order": 3
+        }
+      ],
+      "fields": [
+        {
+          "id": "FLD-001",
+          "name": "审计日期",
+          "type": "date",
+          "sectionId": "SEC-001",
+          "required": true
+        },
+        {
+          "id": "FLD-002",
+          "name": "样本数量",
+          "type": "number",
+          "sectionId": "SEC-002",
+          "required": true
+        },
+        {
+          "id": "FLD-003",
+          "name": "发现问题",
+          "type": "textarea",
+          "sectionId": "SEC-003",
+          "required": false
+        }
+      ],
+      "isStandard": true
+    }
+  ],
+  "workPapers": [
+    {
+      "id": "WP-001",
+      "templateId": "TPL-001",
+      "templateName": "财务凭证检查表",
+      "type": "financial",
+      "taskId": "TASK-001",
+      "taskName": "2024年度财务审计",
+      "assignee": "审计员A",
+      "status": "completed",
+      "content": {
+        "fields": {
+          "auditDate": "2024-06-15",
+          "sampleCount": "50",
+          "findings": "发现3处异常"
+        }
+      },
+      "versions": [
+        {
+          "id": "VER-001",
+          "versionNumber": 1,
+          "content": {
+            "fields": {
+              "auditDate": "2024-06-15"
+            }
+          },
+          "changedBy": "审计员A",
+          "changedAt": "2024-06-15"
+        },
+        {
+          "id": "VER-002",
+          "versionNumber": 2,
+          "content": {
+            "fields": {
+              "auditDate": "2024-06-15",
+              "sampleCount": "50"
+            }
+          },
+          "changedBy": "审计员A",
+          "changedAt": "2024-06-16"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "REV-001",
+          "reviewer": "审计经理",
+          "reviewLevel": "first",
+          "result": "passed",
+          "reviewedAt": "2024-06-20"
+        }
+      ],
+      "evidences": [
+        "EVID-001",
+        "EVID-002"
+      ],
+      "createdAt": "2024-06-15",
+      "updatedAt": "2024-06-20"
+    }
+  ],
+  "workflowTickets": [
+    {
+      "id": "TICKET-001",
+      "riskId": "ALT-001",
+      "riskType": "交易异常",
+      "department": "财务部",
+      "deadline": "2024-07-15",
+      "status": "待整改",
+      "progress": 0,
+      "assignee": "张伟",
+      "riskTitle": "大额资金异常转移",
+      "rectificationRequirements": "请核实资金转移的合法性，如违规请追回",
+      "rectificationRecords": [],
+      "operationLogs": [
+        {
+          "id": "OP-001",
+          "action": "创建工单",
+          "operator": "管理员",
+          "operatedAt": "2024-06-30",
+          "details": "创建整改工单"
+        }
+      ]
+    },
+    {
+      "id": "TICKET-002",
+      "riskId": "ALT-002",
+      "riskType": "登录异常",
+      "department": "技术部",
+      "deadline": "2024-07-10",
+      "status": "整改中",
+      "progress": 50,
+      "assignee": "王强",
+      "riskTitle": "高级权限账号异常登录",
+      "rectificationRequirements": "请核实登录行为，加强账号安全措施",
+      "rectificationRecords": [
+        {
+          "id": "REC-001",
+          "content": "已修改密码并启用双因素认证",
+          "createdAt": "2024-06-30",
+          "operator": "王强"
+        }
+      ],
+      "operationLogs": [
+        {
+          "id": "OP-002",
+          "action": "创建工单",
+          "operator": "管理员",
+          "operatedAt": "2024-06-29",
+          "details": "创建整改工单"
+        },
+        {
+          "id": "OP-003",
+          "action": "提交整改记录",
+          "operator": "王强",
+          "operatedAt": "2024-06-30",
+          "details": "提交整改进展"
+        }
+      ]
+    },
+    {
+      "id": "TICKET-003",
+      "riskId": "ALT-003",
+      "riskType": "权限异常",
+      "department": "人力资源部",
+      "deadline": "2024-07-05",
+      "status": "待复查",
+      "progress": 75,
+      "assignee": "李娜",
+      "riskTitle": "员工账号权限过高",
+      "rectificationRequirements": "请调整相关员工权限至合理范围",
+      "rectificationRecords": [
+        {
+          "id": "REC-002",
+          "content": "已完成权限调整，3名员工权限已降级",
+          "createdAt": "2024-06-29",
+          "operator": "李娜"
+        }
+      ],
+      "operationLogs": [
+        {
+          "id": "OP-004",
+          "action": "创建工单",
+          "operator": "管理员",
+          "operatedAt": "2024-06-28",
+          "details": "创建整改工单"
+        },
+        {
+          "id": "OP-005",
+          "action": "提交整改记录",
+          "operator": "李娜",
+          "operatedAt": "2024-06-29",
+          "details": "提交整改进展"
+        }
+      ]
+    }
+  ],
+  "departureAudits": [
+    {
+      "id": "DA-001",
+      "employeeId": "EMP-0987",
+      "employeeName": "刘洋",
+      "department": "技术部",
+      "position": "软件开发工程师",
+      "departureType": "resignation",
+      "departureDate": "2024-06-25",
+      "exitChecklist": {
+        "workHandover": {
+          "completed": true,
+          "items": [
+            "项目文档",
+            "代码库"
+          ],
+          "signedAt": "2024-06-20"
+        },
+        "assetReturn": {
+          "completed": true,
+          "assets": [
+            {
+              "name": "笔记本电脑",
+              "returned": true,
+              "returnedAt": "2024-06-24"
+            }
+          ]
+        },
+        "accountDisable": {
+          "completed": false,
+          "accounts": [
+            {
+              "system": "代码仓库",
+              "disabled": true,
+              "disabledAt": "2024-06-25"
+            },
+            {
+              "system": "ERP系统",
+              "disabled": false
+            }
+          ]
+        },
+        "feeSettlement": {
+          "completed": true,
+          "items": [
+            {
+              "type": "工资",
+              "settled": true,
+              "amount": 15000
+            },
+            {
+              "type": "报销",
+              "settled": true,
+              "amount": 2000
+            }
+          ]
+        },
+        "nonCompeteReminder": {
+          "completed": true,
+          "remindedAt": "2024-06-25",
+          "validUntil": "2025-06-25"
+        },
+        "confidentialityReminder": {
+          "completed": true,
+          "remindedAt": "2024-06-25"
+        }
+      },
+      "accountRecovery": [
+        {
+          "system": "代码仓库",
+          "accountName": "liuyang",
+          "status": "disabled",
+          "disabledAt": "2024-06-25",
+          "responsiblePerson": "王强"
+        },
+        {
+          "system": "ERP系统",
+          "accountName": "liuyang",
+          "status": "pending",
+          "responsiblePerson": "王强"
+        }
+      ],
+      "compensation": {
+        "finalSalary": 15000,
+        "unpaidSalary": 15000,
+        "annualLeaveCompensation": 3000,
+        "overtimeCompensation": 1500,
+        "severancePay": 0,
+        "otherCompensations": [],
+        "totalAmount": 19500,
+        "complianceCheck": "pass"
+      },
+      "complianceChecks": [
+        {
+          "item": "离职手续",
+          "requirement": "完成所有离职手续",
+          "result": "compliant",
+          "evidence": "离职申请表"
+        }
+      ],
+      "risks": [],
+      "status": "in_progress",
+      "createdAt": "2024-06-20"
+    }
+  ],
+  "employees": [
+    {
+      "id": "EMP-001",
+      "employeeId": "E2023001",
+      "name": "张伟",
+      "department": "财务部",
+      "position": "财务经理",
+      "status": "active",
+      "hireDate": "2020-01-15",
+      "tenure": 4,
+      "positionChanges": [
+        {
+          "id": "PC-001",
+          "position": "财务主管",
+          "department": "财务部",
+          "changeDate": "2022-06-01",
+          "changeType": "promotion",
+          "reason": "表现优异"
+        }
+      ],
+      "attendanceRecords": [
+        {
+          "id": "AR-001",
+          "month": "2024-06",
+          "totalDays": 22,
+          "attendanceDays": 20,
+          "leaveDays": 2,
+          "lateCount": 1,
+          "absentCount": 0
+        }
+      ],
+      "awardRecords": [
+        {
+          "id": "AW-001",
+          "name": "年度优秀员工",
+          "type": "performance",
+          "level": "company",
+          "date": "2023-12-20"
+        }
+      ]
+    },
+    {
+      "id": "EMP-002",
+      "employeeId": "E2023002",
+      "name": "李娜",
+      "department": "人力资源部",
+      "position": "HR专员",
+      "status": "active",
+      "hireDate": "2021-03-20",
+      "tenure": 3,
+      "positionChanges": [],
+      "attendanceRecords": [
+        {
+          "id": "AR-002",
+          "month": "2024-06",
+          "totalDays": 22,
+          "attendanceDays": 21,
+          "leaveDays": 1,
+          "lateCount": 0,
+          "absentCount": 0
+        }
+      ],
+      "awardRecords": []
+    }
+  ],
+  "personnelArchives": [
+    {
+      "id": "PA-001",
+      "employeeId": "EMP-0987",
+      "employeeName": "刘洋",
+      "department": "技术部",
+      "documents": [
+        {
+          "id": "DOC-001",
+          "name": "劳动合同",
+          "type": "contract",
+          "uploadedAt": "2020-06-01",
+          "uploadedBy": "HR",
+          "fileSize": 1024000,
+          "status": "archived"
+        },
+        {
+          "id": "DOC-002",
+          "name": "身份证复印件",
+          "type": "id_document",
+          "uploadedAt": "2020-06-01",
+          "uploadedBy": "HR",
+          "fileSize": 512000,
+          "status": "archived"
+        }
+      ],
+      "dataClassification": "internal",
+      "accessLogs": [
+        {
+          "id": "AL-001",
+          "accessorId": "ACC-002",
+          "accessorName": "李娜",
+          "accessorRole": "HR",
+          "action": "view",
+          "documentId": "DOC-001",
+          "timestamp": "2024-06-25",
+          "ipAddress": "192.168.1.101"
+        }
+      ],
+      "privacyRequests": [],
+      "lastUpdated": "2024-06-25"
+    }
+  ],
+  "personnelChanges": [
+    {
+      "id": "PC-002",
+      "employeeId": "EMP-002",
+      "employeeName": "李娜",
+      "changeType": "promotion",
+      "fromDepartment": "人力资源部",
+      "toDepartment": "人力资源部",
+      "fromPosition": "HR专员",
+      "toPosition": "HR主管",
+      "fromSalary": 8000,
+      "toSalary": 10000,
+      "effectiveDate": "2024-07-01",
+      "reason": "工作表现优秀，符合晋升条件",
+      "approvalStatus": "pending",
+      "salarySyncStatus": "pending",
+      "createdAt": "2024-06-28"
+    }
+  ],
+  "recruitmentAudits": [
+    {
+      "id": "RA-001",
+      "candidateId": "CAND-001",
+      "candidateName": "赵雪",
+      "position": "会计",
+      "department": "财务部",
+      "recruiter": "李娜",
+      "status": "contract_signing",
+      "backgroundCheck": {
+        "completed": true,
+        "completedAt": "2024-06-25",
+        "items": {
+          "identity": true,
+          "education": true,
+          "employment": true,
+          "criminal": true,
+          "credit": true
+        },
+        "results": [
+          "背景调查通过"
+        ]
+      },
+      "materialsReview": {
+        "completed": true,
+        "completedAt": "2024-06-26",
+        "items": {
+          "idCard": true,
+          "diploma": true,
+          "certificate": true,
+          "healthCertificate": true,
+          "photos": true
+        },
+        "completeness": 100,
+        "missingItems": []
+      },
+      "contractSigning": {
+        "completed": false,
+        "contractType": "劳动合同",
+        "startDate": "2024-07-01",
+        "probationEndDate": "2024-10-01",
+        "probationSalary": 8000,
+        "formalSalary": 10000,
+        "requiredClauses": {
+          "jobDescription": true,
+          "salary": true,
+          "workingHours": true,
+          "socialSecurity": true,
+          "confidentiality": true
+        }
+      },
+      "risks": [],
+      "createdAt": "2024-06-20",
+      "updatedAt": "2024-06-28"
+    }
+  ],
+  "workMonitors": [
+    {
+      "id": "WM-001",
+      "employeeId": "EMP-001",
+      "employeeName": "张伟",
+      "department": "财务部",
+      "position": "财务经理",
+      "month": "2024-06",
+      "attendance": {
+        "normalDays": 20,
+        "lateCount": 1,
+        "earlyLeaveCount": 0,
+        "absentDays": 0,
+        "leaveDays": 2
+      },
+      "overtime": {
+        "totalHours": 15,
+        "weekendHours": 8,
+        "holidayHours": 0,
+        "compensated": false
+      },
+      "leaveAnalysis": {
+        "annualLeave": {
+          "used": 2,
+          "remaining": 8
+        },
+        "sickLeave": 0,
+        "maternityLeave": 0,
+        "unpaidLeave": 0
+      },
+      "compliance": [
+        {
+          "type": "attendance",
+          "item": "出勤率",
+          "result": "pass",
+          "details": "出勤率91%"
+        },
+        {
+          "type": "overtime",
+          "item": "加班时长",
+          "result": "warning",
+          "details": "月度加班超过10小时"
+        }
+      ],
+      "anomalies": [
+        {
+          "id": "ANOM-001",
+          "type": "加班异常",
+          "description": "连续两周周末加班",
+          "severity": "low",
+          "detectedAt": "2024-06-20",
+          "status": "pending"
+        }
+      ],
+      "riskLevel": "low",
+      "createdAt": "2024-07-01"
+    }
+  ],
+  "aiModels": [
+    {
+      "id": "AI-001",
+      "name": "智能风控检测模型",
+      "type": "anomaly_detection",
+      "description": "基于机器学习的风险异常检测模型",
+      "status": "production",
+      "currentVersion": "v2.1.0",
+      "versions": [
+        {
+          "id": "VER-001",
+          "version": "v2.1.0",
+          "description": "优化检测精度",
+          "metrics": {
+            "precision": 0.92,
+            "recall": 0.88,
+            "f1Score": 0.9,
+            "falsePositiveRate": 0.05,
+            "falseNegativeRate": 0.08,
+            "accuracy": 0.95
+          },
+          "trainedAt": "2024-06-15",
+          "trainedBy": "AI工程师",
+          "trainingDatasetSize": 50000,
+          "isProduction": true,
+          "rollbackAvailable": true,
+          "changeLog": "提升大额交易检测准确率"
+        },
+        {
+          "id": "VER-002",
+          "version": "v2.0.0",
+          "description": "初始版本",
+          "metrics": {
+            "precision": 0.88,
+            "recall": 0.85,
+            "f1Score": 0.86,
+            "falsePositiveRate": 0.08,
+            "falseNegativeRate": 0.12,
+            "accuracy": 0.92
+          },
+          "trainedAt": "2024-03-01",
+          "trainedBy": "AI工程师",
+          "trainingDatasetSize": 40000,
+          "isProduction": false,
+          "rollbackAvailable": false,
+          "changeLog": "基础版本发布"
+        }
+      ],
+      "metrics": {
+        "precision": 0.92,
+        "recall": 0.88,
+        "f1Score": 0.9,
+        "falsePositiveRate": 0.05,
+        "falseNegativeRate": 0.08,
+        "accuracy": 0.95,
+        "detectionCount": 128,
+        "auditVerifiedCount": 115
+      },
+      "trainingLogs": [
+        {
+          "id": "TL-001",
+          "version": "v2.1.0",
+          "epoch": 1,
+          "loss": 0.25,
+          "trainAccuracy": 0.85,
+          "valAccuracy": 0.83,
+          "timestamp": "2024-06-10",
+          "duration": 1200
+        },
+        {
+          "id": "TL-002",
+          "version": "v2.1.0",
+          "epoch": 50,
+          "loss": 0.08,
+          "trainAccuracy": 0.96,
+          "valAccuracy": 0.94,
+          "timestamp": "2024-06-12",
+          "duration": 1800
+        }
+      ],
+      "inferenceLogs": [
+        {
+          "id": "IL-001",
+          "modelId": "AI-001",
+          "modelVersion": "v2.1.0",
+          "inputType": "transaction",
+          "inputSize": 1000,
+          "result": "risk_detected",
+          "confidence": 0.95,
+          "latency": 50,
+          "timestamp": "2024-06-30",
+          "verified": true,
+          "verifier": "审计员A"
+        },
+        {
+          "id": "IL-002",
+          "modelId": "AI-001",
+          "modelVersion": "v2.1.0",
+          "inputType": "login",
+          "inputSize": 500,
+          "result": "anomaly_detected",
+          "confidence": 0.92,
+          "latency": 30,
+          "timestamp": "2024-06-29",
+          "verified": false
+        }
+      ],
+      "explanationConfig": {
+        "enabled": true,
+        "type": "feature_importance",
+        "template": "standard",
+        "topFeatures": 5,
+        "showConfidence": true,
+        "showEvidence": true
+      },
+      "creator": "AI工程师",
+      "createdAt": "2024-02-15",
+      "lastDeployedAt": "2024-06-15",
+      "dataSource": [
+        "交易数据",
+        "登录日志",
+        "权限变更记录"
+      ],
+      "useCases": [
+        "异常交易检测",
+        "异常登录识别",
+        "权限滥用预警"
+      ]
+    }
+  ],
+  "crossSystemAnalyses": [
+    {
+      "id": "CSA001",
+      "taskId": "MM004",
+      "analysisName": "收入确认跨系统一致性分析",
+      "systems": [
+        "ERP财务系统",
+        "CRM客户系统",
+        "OA审批系统"
+      ],
+      "dataPoints": [
+        {
+          "id": "DP001",
+          "system": "CRM系统",
+          "entity": "SO202605001",
+          "field": "确认收入日期",
+          "value": "2026-05-15",
+          "timestamp": "2026-05-15 10:30:00"
+        },
+        {
+          "id": "DP002",
+          "system": "ERP系统",
+          "entity": "SO202605001",
+          "field": "入账日期",
+          "value": "2026-06-10",
+          "timestamp": "2026-06-10 14:20:00"
+        },
+        {
+          "id": "DP003",
+          "system": "OA系统",
+          "entity": "SO202605001",
+          "field": "验收审批日期",
+          "value": "2026-05-20",
+          "timestamp": "2026-05-20 09:15:00"
+        }
+      ],
+      "inconsistencies": [
+        {
+          "id": "INC001",
+          "type": "收入确认跨期",
+          "description": "8笔销售订单CRM已确认收入，但ERP财务系统延迟15-30天入账，涉及金额合计156万元",
+          "affectedSystems": [
+            "ERP财务系统",
+            "CRM客户系统"
+          ],
+          "severity": "high",
+          "suggestedAction": "核查收入确认政策，调整账务处理，完善系统间实时对账机制"
+        },
+        {
+          "id": "INC002",
+          "type": "客户信息不一致",
+          "description": "发现12个客户在CRM和ERP系统中的名称、税号、地址等信息存在差异",
+          "affectedSystems": [
+            "CRM客户系统",
+            "ERP财务系统"
+          ],
+          "severity": "medium",
+          "suggestedAction": "开展客户主数据治理，明确数据维护责任部门，建立数据质量考核机制"
+        },
+        {
+          "id": "INC003",
+          "type": "审批流程断点",
+          "description": "5笔大额采购在OA系统中无审批记录，但ERP系统已完成付款",
+          "affectedSystems": [
+            "OA审批系统",
+            "ERP财务系统",
+            "采购系统"
+          ],
+          "severity": "high",
+          "suggestedAction": "立即核查这5笔采购的真实性和合规性，修复系统间审批流程断点"
+        }
+      ],
+      "correlationScore": 0.87,
+      "conclusion": "本次跨系统联动分析覆盖财务、业务、审批三大类系统，共比对数据记录12,580条，发现8处重大数据不一致和5处流程断点。主要问题集中在收入确认跨期、客户主数据不统一、采购审批流程断点等方面，涉及金额较大，建议尽快整改。"
+    }
+  ],
+  "fraudClues": [
+    {
+      "id": "FC-001",
+      "taskId": "MMT-001",
+      "type": "fake_invoice",
+      "title": "发票号码重复",
+      "description": "检测到两张发票使用相同的发票号码",
+      "riskLevel": "high",
+      "confidence": 0.98,
+      "evidence": [
+        {
+          "id": "EVID-001",
+          "type": "发票扫描件",
+          "description": "可疑发票图像",
+          "source": "上传文件",
+          "timestamp": "2024-06-28",
+          "relevance": 0.95
+        },
+        {
+          "id": "EVID-002",
+          "type": "发票数据库",
+          "description": "发票号码记录",
+          "source": "ERP系统",
+          "timestamp": "2024-06-28",
+          "relevance": 0.98
+        }
+      ],
+      "sourceSystems": [
+        "ERP系统",
+        "审计系统"
+      ],
+      "detectedAt": "2024-06-28",
+      "status": "investigating",
+      "relatedEntities": [
+        "供应商A",
+        "财务部"
+      ],
+      "recommendation": "请核实发票真实性，联系供应商确认"
+    },
+    {
+      "id": "FC-002",
+      "taskId": "MMT-001",
+      "type": "control_breakpoint",
+      "title": "审批流程异常",
+      "description": "大额采购未经过完整审批流程",
+      "riskLevel": "medium",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "id": "EVID-003",
+          "type": "审批记录",
+          "description": "审批流程日志",
+          "source": "OA系统",
+          "timestamp": "2024-06-28",
+          "relevance": 0.92
+        }
+      ],
+      "sourceSystems": [
+        "OA系统",
+        "审计系统"
+      ],
+      "detectedAt": "2024-06-28",
+      "status": "new",
+      "relatedEntities": [
+        "采购部",
+        "财务部"
+      ],
+      "recommendation": "请检查审批流程设置"
+    }
+  ],
+  "multimodalTasks": [
+    {
+      "id": "MMT-001",
+      "name": "发票OCR识别任务",
+      "type": "ocr_recognition",
+      "status": "completed",
+      "sourceType": "文件上传",
+      "sourceName": "发票扫描件.pdf",
+      "fileSize": 2048000,
+      "aiModel": "智能风控检测模型",
+      "confidence": 0.95,
+      "result": "识别完成，发现异常发票",
+      "cluesFound": 3,
+      "createdAt": "2024-06-28",
+      "completedAt": "2024-06-28",
+      "createdBy": "审计员A",
+      "riskLevel": "high"
+    },
+    {
+      "id": "MMT-002",
+      "name": "合同文本分析",
+      "type": "text_analysis",
+      "status": "processing",
+      "sourceType": "文件上传",
+      "sourceName": "采购合同.docx",
+      "fileSize": 512000,
+      "aiModel": "智能风控检测模型",
+      "confidence": 0,
+      "cluesFound": 0,
+      "createdAt": "2024-06-30",
+      "createdBy": "审计员B",
+      "riskLevel": "medium"
+    }
+  ],
+  "ocrResults": [
+    {
+      "id": "OCR001",
+      "taskId": "MM002",
+      "invoiceType": "增值税专用发票",
+      "invoiceCode": "031002200111",
+      "invoiceNumber": "12345678",
+      "amount": 156800,
+      "taxAmount": 20384,
+      "seller": "XX科技有限公司",
+      "buyer": "我司",
+      "date": "2026-05-15",
+      "items": [
+        {
+          "id": "II001",
+          "name": "服务器",
+          "specification": "XX型号",
+          "quantity": 2,
+          "unitPrice": 69247.79,
+          "amount": 138495.58,
+          "taxRate": "13%"
+        },
+        {
+          "id": "II002",
+          "name": "安装服务费",
+          "specification": "",
+          "quantity": 1,
+          "unitPrice": 16106.19,
+          "amount": 16106.19,
+          "taxRate": "6%"
+        }
+      ],
+      "verificationStatus": "suspicious",
+      "riskFlags": [
+        "开票方经营异常",
+        "发票号码连号风险",
+        "货物名称与业务不符"
+      ]
+    },
+    {
+      "id": "OCR002",
+      "taskId": "MM002",
+      "invoiceType": "增值税专用发票",
+      "invoiceCode": "031002200111",
+      "invoiceNumber": "12345679",
+      "amount": 85600,
+      "taxAmount": 11128,
+      "seller": "YY贸易有限公司",
+      "buyer": "我司",
+      "date": "2026-06-10",
+      "items": [
+        {
+          "id": "II003",
+          "name": "办公用品一批",
+          "specification": "",
+          "quantity": 1,
+          "unitPrice": 75752.21,
+          "amount": 75752.21,
+          "taxRate": "13%"
+        }
+      ],
+      "verificationStatus": "verified",
+      "riskFlags": []
+    },
+    {
+      "id": "OCR003",
+      "taskId": "MM002",
+      "invoiceType": "增值税普通发票",
+      "invoiceCode": "031002100104",
+      "invoiceNumber": "87654321",
+      "amount": 42800,
+      "taxAmount": 2490.57,
+      "seller": "ZZ咨询服务部",
+      "buyer": "我司",
+      "date": "2026-04-20",
+      "items": [
+        {
+          "id": "II004",
+          "name": "咨询服务费",
+          "specification": "",
+          "quantity": 1,
+          "unitPrice": 40309.43,
+          "amount": 40309.43,
+          "taxRate": "6%"
+        }
+      ],
+      "verificationStatus": "unverified",
+      "riskFlags": [
+        "咨询服务内容不明确"
+      ]
+    }
+  ],
+  "riskHeatmapData": {
+    "id": "HM-202406",
+    "period": "2024年6月",
+    "type": "enterprise",
+    "dimensions": [
+      {
+        "id": "DIM-001",
+        "name": "财务",
+        "weight": 0.3,
+        "description": "财务相关风险"
+      },
+      {
+        "id": "DIM-002",
+        "name": "运营",
+        "weight": 0.25,
+        "description": "运营相关风险"
+      },
+      {
+        "id": "DIM-003",
+        "name": "IT",
+        "weight": 0.25,
+        "description": "IT相关风险"
+      },
+      {
+        "id": "DIM-004",
+        "name": "合规",
+        "weight": 0.2,
+        "description": "合规相关风险"
+      }
+    ],
+    "cells": [
+      {
+        "id": "CELL-001",
+        "rowLabel": "财务部",
+        "colLabel": "财务",
+        "riskScore": 85,
+        "riskLevel": "high",
+        "riskCount": 45,
+        "highRiskCount": 25,
+        "mediumRiskCount": 15,
+        "lowRiskCount": 5,
+        "trend": "up",
+        "trendChange": 10,
+        "aiConfidence": 0.92
+      },
+      {
+        "id": "CELL-002",
+        "rowLabel": "财务部",
+        "colLabel": "运营",
+        "riskScore": 65,
+        "riskLevel": "medium",
+        "riskCount": 20,
+        "highRiskCount": 5,
+        "mediumRiskCount": 10,
+        "lowRiskCount": 5,
+        "trend": "stable",
+        "trendChange": 2,
+        "aiConfidence": 0.85
+      },
+      {
+        "id": "CELL-003",
+        "rowLabel": "人力资源部",
+        "colLabel": "IT",
+        "riskScore": 70,
+        "riskLevel": "medium",
+        "riskCount": 15,
+        "highRiskCount": 3,
+        "mediumRiskCount": 8,
+        "lowRiskCount": 4,
+        "trend": "up",
+        "trendChange": 8,
+        "aiConfidence": 0.88
+      },
+      {
+        "id": "CELL-004",
+        "rowLabel": "技术部",
+        "colLabel": "IT",
+        "riskScore": 75,
+        "riskLevel": "high",
+        "riskCount": 30,
+        "highRiskCount": 10,
+        "mediumRiskCount": 12,
+        "lowRiskCount": 8,
+        "trend": "down",
+        "trendChange": -5,
+        "aiConfidence": 0.9
+      },
+      {
+        "id": "CELL-005",
+        "rowLabel": "市场部",
+        "colLabel": "合规",
+        "riskScore": 60,
+        "riskLevel": "medium",
+        "riskCount": 12,
+        "highRiskCount": 2,
+        "mediumRiskCount": 6,
+        "lowRiskCount": 4,
+        "trend": "up",
+        "trendChange": 15,
+        "aiConfidence": 0.82
+      }
+    ],
+    "generatedAt": "2024-06-30",
+    "totalRisks": 128,
+    "highRiskCount": 45,
+    "mediumRiskCount": 51,
+    "lowRiskCount": 32
+  },
+  "riskMigrations": [
+    {
+      "id": "RM001",
+      "riskId": "R001",
+      "riskTitle": "采购合同审批跳级",
+      "fromLevel": "medium",
+      "toLevel": "high",
+      "fromDepartment": "采购部",
+      "toDepartment": "采购部",
+      "fromPeriod": "2026年Q1",
+      "toPeriod": "2026年Q2",
+      "reason": "同类风险连续发生3次，影响范围扩大",
+      "changedAt": "2026-06-20"
+    },
+    {
+      "id": "RM002",
+      "riskId": "R002",
+      "riskTitle": "研发部越权访问",
+      "fromLevel": "high",
+      "toLevel": "medium",
+      "fromDepartment": "研发部",
+      "toDepartment": "研发部",
+      "fromPeriod": "2026年Q1",
+      "toPeriod": "2026年Q2",
+      "reason": "已部署权限治理系统，风险显著降低",
+      "changedAt": "2026-06-15"
+    },
+    {
+      "id": "RM003",
+      "riskId": "R003",
+      "riskTitle": "销售收款不入账",
+      "fromLevel": "low",
+      "toLevel": "high",
+      "fromDepartment": "销售部",
+      "toDepartment": "销售部",
+      "fromPeriod": "2026年Q1",
+      "toPeriod": "2026年Q2",
+      "reason": "发现疑似舞弊线索，升级为高风险",
+      "changedAt": "2026-06-18"
+    },
+    {
+      "id": "RM004",
+      "riskId": "R004",
+      "riskTitle": "财务核算差错",
+      "fromLevel": "medium",
+      "toLevel": "low",
+      "fromDepartment": "财务部",
+      "toDepartment": "财务部",
+      "fromPeriod": "2026年Q1",
+      "toPeriod": "2026年Q2",
+      "reason": "系统升级后自动化校验覆盖率提升",
+      "changedAt": "2026-06-10"
+    }
+  ],
+  "riskQuantifications": [
+    {
+      "id": "RQ001",
+      "riskId": "RQ-001",
+      "riskTitle": "采购合同审批跳级风险",
+      "department": "采购部",
+      "process": "采购付款",
+      "impactScore": 85,
+      "probabilityScore": 72,
+      "aiConfidence": 0.91,
+      "overallScore": 80.2,
+      "riskLevel": "high",
+      "weights": {
+        "impact": 0.4,
+        "probability": 0.35,
+        "aiConfidence": 0.25
+      },
+      "quantifiedAt": "2026-06-25"
+    },
+    {
+      "id": "RQ002",
+      "riskId": "RQ-002",
+      "riskTitle": "销售费用报销超标",
+      "department": "销售部",
+      "process": "费用报销",
+      "impactScore": 60,
+      "probabilityScore": 80,
+      "aiConfidence": 0.88,
+      "overallScore": 66.4,
+      "riskLevel": "medium",
+      "weights": {
+        "impact": 0.4,
+        "probability": 0.35,
+        "aiConfidence": 0.25
+      },
+      "quantifiedAt": "2026-06-25"
+    },
+    {
+      "id": "RQ003",
+      "riskId": "RQ-003",
+      "riskTitle": "研发源代码泄露风险",
+      "department": "研发部",
+      "process": "IT运维",
+      "impactScore": 95,
+      "probabilityScore": 45,
+      "aiConfidence": 0.82,
+      "overallScore": 74,
+      "riskLevel": "high",
+      "weights": {
+        "impact": 0.4,
+        "probability": 0.35,
+        "aiConfidence": 0.25
+      },
+      "quantifiedAt": "2026-06-25"
+    }
+  ],
+  "riskTrendComparisons": [
+    {
+      "period": "2025年Q4",
+      "totalRisks": 520,
+      "highRiskCount": 98,
+      "mediumRiskCount": 195,
+      "lowRiskCount": 227,
+      "averageScore": 42.5,
+      "closedCount": 380,
+      "closureRate": 0.73
+    },
+    {
+      "period": "2026年Q1",
+      "totalRisks": 598,
+      "highRiskCount": 118,
+      "mediumRiskCount": 228,
+      "lowRiskCount": 252,
+      "averageScore": 48.2,
+      "closedCount": 420,
+      "closureRate": 0.7
+    },
+    {
+      "period": "2026年Q2",
+      "totalRisks": 678,
+      "highRiskCount": 145,
+      "mediumRiskCount": 256,
+      "lowRiskCount": 277,
+      "averageScore": 52.8,
+      "closedCount": 312,
+      "closureRate": 0.46
+    }
+  ],
+  "textAnalysisResults": [
+    {
+      "id": "TA001",
+      "taskId": "MM001",
+      "documentType": "采购合同（共12份）",
+      "keyEntities": [
+        {
+          "id": "KE001",
+          "type": "company",
+          "value": "XX科技有限公司",
+          "context": "合同甲方，供应商",
+          "confidence": 0.99
+        },
+        {
+          "id": "KE002",
+          "type": "person",
+          "value": "张某",
+          "context": "授权代表人",
+          "confidence": 0.97
+        },
+        {
+          "id": "KE003",
+          "type": "amount",
+          "value": "580万元",
+          "context": "合同总金额",
+          "confidence": 0.98
+        },
+        {
+          "id": "KE004",
+          "type": "date",
+          "value": "2026年5月20日",
+          "context": "合同签订日期",
+          "confidence": 0.96
+        },
+        {
+          "id": "KE005",
+          "type": "contract",
+          "value": "CGHT20260520",
+          "context": "合同编号",
+          "confidence": 0.99
+        },
+        {
+          "id": "KE006",
+          "type": "company",
+          "value": "YY贸易公司",
+          "context": "另一供应商",
+          "confidence": 0.95
+        }
+      ],
+      "riskSentences": [
+        {
+          "id": "RS001",
+          "content": "甲方有权在合同履行过程中单方调整价格，乙方不得提出异议。",
+          "riskType": "合同条款不对等",
+          "riskLevel": "high",
+          "position": "第3条第2款",
+          "reason": "明显偏向甲方，违反公平原则"
+        },
+        {
+          "id": "RS002",
+          "content": "付款条件为预付80%货款，剩余20%货到后30天内付清。",
+          "riskType": "付款条款风险",
+          "riskLevel": "high",
+          "position": "第5条第1款",
+          "reason": "预付比例过高，资金风险大"
+        },
+        {
+          "id": "RS003",
+          "content": "违约金上限为合同总金额的1%。",
+          "riskType": "违约责任过轻",
+          "riskLevel": "medium",
+          "position": "第7条第3款",
+          "reason": "违约成本过低，约束效力弱"
+        }
+      ],
+      "semanticSummary": "本批12份采购合同总金额约1500万元。经AI语义分析，发现其中5份合同存在不同程度的法律风险，主要集中在违约责任不对等、付款条款过于宽松、争议解决条款不利我方等方面。其中1份合同的供应商疑似与采购部负责人存在关联关系，建议重点关注。",
+      "contractClauses": [
+        {
+          "id": "CC001",
+          "title": "付款条款",
+          "content": "预付80%，货到验收合格后支付20%",
+          "riskLevel": "high",
+          "reviewNote": "预付比例过高，建议调整为预付30%，验收合格后支付65%，质保金5%"
+        },
+        {
+          "id": "CC002",
+          "title": "违约责任",
+          "content": "违约金上限为合同总金额的1%",
+          "riskLevel": "medium",
+          "reviewNote": "违约成本过低，建议提高至5%-10%"
+        }
+      ]
+    }
+  ],
+  "voiceTranscriptionResults": [
+    {
+      "id": "VT001",
+      "taskId": "MM003",
+      "duration": 2450,
+      "speakers": [
+        {
+          "id": "SP001",
+          "speakerLabel": "发言者A",
+          "role": "采购经理",
+          "totalDuration": 1450,
+          "speechCount": 42
+        },
+        {
+          "id": "SP002",
+          "speakerLabel": "发言者B",
+          "role": "审计员",
+          "totalDuration": 1000,
+          "speechCount": 38
+        }
+      ],
+      "transcription": [
+        {
+          "id": "TS001",
+          "speaker": "发言者B",
+          "startTime": 0,
+          "endTime": 15,
+          "content": "您好，感谢您接受本次审计访谈。首先想了解一下采购部门的基本工作流程。",
+          "emotion": "中性"
+        },
+        {
+          "id": "TS002",
+          "speaker": "发言者A",
+          "startTime": 15,
+          "endTime": 45,
+          "content": "好的，我们采购部主要负责公司生产物资和办公用品的采购工作，流程大概是需求部门提报，我们审核，然后走招投标或者询比价，确定供应商后签合同。",
+          "emotion": "中性"
+        },
+        {
+          "id": "TS003",
+          "speaker": "发言者B",
+          "startTime": 45,
+          "endTime": 60,
+          "content": "了解了。那紧急采购的情况多吗？一般怎么处理？",
+          "emotion": "中性"
+        },
+        {
+          "id": "TS004",
+          "speaker": "发言者A",
+          "startTime": 60,
+          "endTime": 95,
+          "content": "紧急采购...嗯，偶尔会有，比如生产线坏了需要马上换配件那种。这种情况一般我们会直接找常用的供应商先送货，后面补手续。",
+          "emotion": "紧张"
+        },
+        {
+          "id": "TS005",
+          "speaker": "发言者B",
+          "startTime": 95,
+          "endTime": 110,
+          "content": "那紧急采购有什么审批要求吗？比如金额限制什么的。",
+          "emotion": "中性"
+        },
+        {
+          "id": "TS006",
+          "speaker": "发言者A",
+          "startTime": 110,
+          "endTime": 140,
+          "content": "这个...理论上是要部门总监批的，但实际操作中，我们有时候来不及，就先办了再说，反正都是为了公司业务嘛。",
+          "emotion": "紧张"
+        }
+      ],
+      "anomalyDetection": [
+        {
+          "id": "SA001",
+          "type": "情绪异常",
+          "description": "在回答紧急采购问题时，语速明显加快，情绪紧张",
+          "timePosition": "01:00-02:20",
+          "severity": "medium",
+          "relatedContent": "紧急采购流程"
+        },
+        {
+          "id": "SA002",
+          "type": "话术矛盾",
+          "description": "前面说\"都按制度来\"，后面又承认\"先办了再说\"",
+          "timePosition": "00:45 vs 01:50",
+          "severity": "high",
+          "relatedContent": "采购审批制度执行"
+        }
+      ],
+      "summary": "本次访谈对象为采购部经理，访谈时长约41分钟。访谈内容涵盖采购流程、供应商管理、合同管理、付款管理等方面。AI分析发现，受访者在回答紧急采购、供应商选择等敏感问题时，存在语速加快、犹豫停顿等情绪紧张表现，且部分表述存在前后矛盾。建议结合制度文件和实际业务数据进一步核实。"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "v-fletch",
+  "version": "0.3.2",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "license": "Apache-2.0",
+  "description": "V-Fletch — model-agnostic local office agent (Node backend + Vite/React frontend, MCP tool integration)",
+  "engines": {
+    "node": ">=22.5"
+  },
+  "scripts": {
+    "dev": "node server/main.mjs",
+    "dev:web": "vite --config web/vite.config.js",
+    "build:web": "vite build --config web/vite.config.js && node scripts/write-version.mjs",
+    "start": "node server/main.mjs",
+    "app": "electron .",
+    "app:pack": "electron-builder --config electron-builder.yml --win dir",
+    "kit:local": "node scripts/make-local-kit.mjs",
+    "mcp:list": "node server/cli.mjs mcp:list",
+    "mcp:doctor": "node server/cli.mjs mcp:doctor",
+    "model:ping": "node server/cli.mjs model:ping",
+    "bundle:mcp": "node scripts/bundle-mcp.mjs"
+  },
+  "dependencies": {
+    "@langchain/core": "^1.2.9",
+    "@langchain/langgraph": "^1.4.14",
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.1",
+    "electron": "^44.2.0",
+    "electron-builder": "^26.15.3",
+    "esbuild": "^0.28.2",
+    "vite": "^8.2.2"
+  }
+}

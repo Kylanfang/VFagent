@@ -1,0 +1,38 @@
+# V-Fletch Desktop 打包配置
+appId: com.vfletch.desktop
+productName: V-Fletch
+directories:
+  output: release
+files:
+  - electron/**
+  - server/**
+  - web/dist/**
+  - config/**
+  - brand/icon.ico
+  - "!**/*.map"
+  - "!release/**"
+  - "!tmp*/**"
+  # 密钥与运行时数据不进包：本地引擎 + 配置模板随包分发，真实密钥与数据由用户首次运行时生成
+  - "!config/model.json"
+  - "!config/mcp.json"
+  - "!config/vfletch.db*"
+  - "!config/memory.json"
+  - "!config/usage.json"
+asar: false
+npmRebuild: false
+# 离线打包：直接复用本地 node_modules/electron/dist，避免 electron-builder 联网下载/校验
+electronDist: node_modules/electron/dist
+win:
+  executableName: V-Fletch
+  icon: brand/icon.ico
+  target:
+    - dir
+    - nsis
+nsis:
+  oneClick: false            # 允许用户自选安装路径
+  perMachine: false          # 用户级安装，不需要管理员权限
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: V-Fletch
+  artifactName: V-Fletch-Setup-${version}.${ext}

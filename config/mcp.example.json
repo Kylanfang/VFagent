@@ -1,0 +1,29 @@
+{
+  "$comment": "MCP 配置模板。复制为 config/mcp.json 后按需启用。不提供该文件时，后端自动降级为仅内置 server（审计风控 / 联网检索 / 图像生成 / 本地代码 / 记忆库）。env 与 headers 的值支持 'env:VAR_NAME' 从环境变量读取（推荐，密钥不落盘）。",
+  "servers": [
+    {
+      "id": "filesystem",
+      "name": "本地文件系统",
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
+      "enabled": false
+    },
+    {
+      "id": "sequential-thinking",
+      "name": "顺序思考",
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "enabled": false
+    },
+    {
+      "id": "remote-demo",
+      "name": "远端 MCP 示例（Streamable HTTP）",
+      "transport": "http",
+      "url": "https://example.com/mcp",
+      "headers": { "Authorization": "Bearer env:MCP_TOKEN" },
+      "enabled": false
+    }
+  ]
+}

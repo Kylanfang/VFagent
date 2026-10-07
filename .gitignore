@@ -1,0 +1,45 @@
+node_modules/
+release/
+dist/
+*.log
+/tmp*
+# 运行时配置与数据（含密钥/账号库，不入库；模板见 config/*.example.json）
+config/model.json
+config/mcp.json
+config/*.db
+config/*.db-shm
+config/*.db-wal
+config/memory.json
+config/usage.json
+
+# 自动化测试隔离环境（含密钥/数据库/日志，不入库）
+.autotest/
+.tmp-test-config/
+dev/testkeys.json
+config/audit-data.json
+
+.autotest-sec/
+uploads/
+.autotest-hitl/
+
+# 发布补强
+release/
+*.exe
+*.lnk
+pgdata/
+
+# 公开面净化：内部过程文档 / 云端地址 / 内部构建链不得再入库
+# （这些文件已从工作树移除；此处显式列出以防后续误提交复入公开面）
+docs/BUG-LEDGER.md
+docs/obsidian/
+dev/NIGHT-LOOP.md
+config/central-server.txt
+config/public-url.txt
+scripts/build-protected.mjs
+scripts/deploy-ui.mjs
+scripts/sync-unpacked.mjs
+scripts/extract-audit-data.mjs
+scripts/control-keygen.mjs
+electron/control.cjs
+server/shell/
+server/adapters/dut.mjs

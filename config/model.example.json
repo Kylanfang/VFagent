@@ -1,0 +1,60 @@
+{
+  "$comment": "模型接入配置。apiKey 支持两种写法：直接写字符串，或用 'env:VAR_NAME' 从环境变量读取（推荐）。protocol: openai-compatible | custom。custom 时 adapter 指向 server/adapters/<name>.mjs 导出的函数。",
+  "active": null,
+  "defaults": {
+    "temperature": 0.3,
+    "maxOutputTokens": 8192,
+    "maxToolRounds": 8
+  },
+  "providers": {
+    "deepseek-v4": {
+      "label": "DeepSeek V4（示例）",
+      "protocol": "openai-compatible",
+      "model": "deepseek-v4",
+      "baseUrl": "https://api.deepseek.com/v1",
+      "supportsTools": true,
+      "supportsStream": true,
+      "notes": "DeepSeek 官方。思维模型 deepseek-reasoner 不支持 system 角色/工具——配置 systemAsUser:true 并关闭工具。",
+      "apiKey": "env:DEEPSEEK_API_KEY"
+    },
+    "deepseek-reasoner": {
+      "label": "DeepSeek Reasoner（示例）",
+      "protocol": "openai-compatible",
+      "model": "deepseek-reasoner",
+      "baseUrl": "https://api.deepseek.com/v1",
+      "supportsTools": false,
+      "supportsStream": true,
+      "systemAsUser": true,
+      "notes": "R1 思维模型：不支持 system 角色与 function calling，必须 systemAsUser:true + supportsTools:false",
+      "apiKey": "env:DEEPSEEK_API_KEY"
+    },
+    "glm-46": {
+      "label": "智谱 GLM-4.6（示例）",
+      "protocol": "openai-compatible",
+      "model": "glm-4.6",
+      "baseUrl": "https://open.bigmodel.cn/api/paas/v4",
+      "supportsTools": true,
+      "supportsStream": true,
+      "notes": "智谱官方。SSE 含 : keep-alive 注释行已兼容；思维开关示例 extraBody；apiKey 支持智谱原生 JWT 或 API Key",
+      "apiKey": "env:ZHIPU_API_KEY",
+      "extraBody": {
+        "thinking": {
+          "type": "enabled"
+        }
+      }
+    },
+    "qwen3-thinking": {
+      "label": "Qwen3 思维（示例）",
+      "protocol": "openai-compatible",
+      "model": "qwen3-235b-a22b",
+      "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "supportsTools": true,
+      "supportsStream": true,
+      "notes": "Qwen3 思维模型：DashScope 用 extraBody 关思考；<think> 标签正文会被自动剥离为思考过程展示",
+      "apiKey": "env:DASHSCOPE_API_KEY",
+      "extraBody": {
+        "enable_thinking": true
+      }
+    }
+  }
+}

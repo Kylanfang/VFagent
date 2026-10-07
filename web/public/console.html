@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>V-Fletch Console</title>
+<style>
+:root{
+  --bg:#fafbfc;--card:#fff;--border:#e2e8f0;--text:#1a202c;--sub:#718096;
+  --accent:#1084fe;--accent-soft:rgba(16,132,254,.06);--green:#00a05a;--red:#e53e3e;
+  --amber:#d69e2e;--radius:14px;--shadow:0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.04);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"SF Pro Text","Segoe UI",Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.hd{background:var(--card);border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;gap:14px}
+.hd-logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#1084fe,#00c972);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;letter-spacing:-.5px}
+.hd-title{font-size:17px;font-weight:700;letter-spacing:-.3px}
+.hd-sub{font-size:12px;color:var(--sub);margin-top:1px}
+.hd-spacer{flex:1}
+.hd-status{display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;background:var(--accent-soft);color:var(--accent)}
+.hd-status .dot{width:8px;height:8px;border-radius:50%}
+.hd-status.on .dot{background:var(--green);animation:pulse 2s ease infinite}
+.hd-status.off .dot{background:var(--red)}
+.hd-status.off{background:rgba(229,62,62,.08);color:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.main{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px 28px;max-width:1200px;margin:0 auto;width:100%}
+@media(max-width:800px){.main{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+.card-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--sub);margin-bottom:16px;display:flex;align-items:center;gap:6px}
+.card-title .ico{font-size:15px}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:none;border-radius:10px;padding:11px 22px;font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .15s;font-family:inherit}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn:active:not(:disabled){transform:scale(.96)}
+.btn svg{width:15px;height:15px}
+.btn-pri{background:var(--accent);color:#fff}
+.btn-pri:hover:not(:disabled){background:#0a6fd4}
+.btn-dan{background:var(--red);color:#fff}
+.btn-dan:hover:not(:disabled){background:#c53030}
+.btn-neu{background:var(--bg);color:var(--text);border:1px solid var(--border)}
+.btn-neu:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:18px}
+.stat{background:var(--bg);border-radius:10px;padding:14px 16px}
+.stat .lb{font-size:11px;color:var(--sub);font-weight:500;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px}
+.stat .vl{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+.lic-box{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border-radius:10px;padding:14px 18px;margin-bottom:14px}
+.lic-label{font-size:14px;font-weight:600}
+.lic-desc{font-size:12px;color:var(--sub);margin-top:2px}
+.toggle{position:relative;width:48px;height:26px;border-radius:13px;background:#cbd5e0;cursor:pointer;transition:background .2s;border:none;flex:none}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle.on{background:var(--green)}
+.toggle.on::after{transform:translateX(22px)}
+.tbl{width:100%;border-collapse:separate;border-spacing:0;margin-top:12px}
+.tbl th{text-align:left;font-size:11px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;padding:8px 12px;border-bottom:1px solid var(--border)}
+.tbl td{font-size:13px;padding:10px 12px;border-bottom:1px solid var(--bg)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .mono{font-family:'SF Mono',Consolas,monospace;font-size:12px}
+.tbl th,.tbl td{white-space:nowrap}.pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:2px 8px;border-radius:6px;font-weight:600}.pill.on{color:#0a7a3c;background:#e3f6ea}.pill.off{color:var(--sub);background:#f0f1f3}
+.region-tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:6px}
+.log-box{background:#1a1d23;border-radius:10px;padding:14px;margin-top:18px;max-height:220px;overflow-y:auto}
+.log-line{font-family:'SF Mono',Consolas,monospace;font-size:11.5px;line-height:1.7;color:#a0aec0}
+.log-line .ts{color:#4a5568;margin-right:8px}
+.log-line.ok{color:#68d391}
+.log-line.err{color:#fc8181}
+.log-line.warn{color:#f6e05e}
+.ft{background:var(--card);border-top:1px solid var(--border);padding:10px 28px;display:flex;justify-content:space-between;font-size:11px;color:var(--sub)}
+/* 访问门禁：身份核验通过前隐藏全部控制内容 */
+body.gated .hd,body.gated .main,body.gated .ft{display:none}
+.gate{display:none;min-height:100vh;align-items:center;justify-content:center}
+body.gated .gate{display:flex}
+.gate-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:34px 38px;width:min(400px,92vw);box-shadow:var(--shadow);text-align:center}
+.gate .ico{font-size:38px}
+.gate h2{font-size:17px;font-weight:700;margin:10px 0 4px}
+.gate p{font-size:12.5px;color:var(--sub);margin-bottom:18px}
+.gate input{width:100%;padding:11px 14px;margin-bottom:10px;border:1px solid var(--border);border-radius:10px;font-size:14px;box-sizing:border-box}
+.gate input:focus{outline:none;border-color:var(--accent)}
+.gate .btn{width:100%;justify-content:center}
+.gate .err{color:var(--red);font-size:12.5px;margin:4px 0 0}
+</style>
+</head>
+<body>
+<div class="gate"><div class="gate-card">
+  <div class="ico">🔒</div>
+  <h2>本机运维 · 需要管理员授权</h2>
+  <p>此页面仅限管理员账号操作，请输入账号密码</p>
+  <input id="gUser" placeholder="主控账号" autocomplete="username">
+  <input id="gPass" type="password" placeholder="主控密码" autocomplete="current-password">
+  <button class="btn btn-pri" data-act="gateLogin">验证并进入</button>
+  <p class="err" id="gErr" style="display:none"></p>
+</div></div>
+<header class="hd">
+  <div class="hd-logo">VF</div>
+  <div>
+    <div class="hd-title">Local Console</div>
+    <div class="hd-sub">Server · Users</div>
+  </div>
+  <div class="hd-spacer"></div>
+  <div class="hd-status off" id="stBadge"><div class="dot"></div><span id="stText">Checking…</span></div>
+</header>
+<div class="main">
+  <div class="card">
+    <div class="card-title"><span class="ico">⚙</span> Server</div>
+    <div class="btn-row">
+      <button class="btn btn-pri" id="btnStart" data-act="startServer" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 4l14 8-14 8z"/></svg> Start</button>
+      <button class="btn btn-dan" id="btnStop" data-act="stopServer" disabled><svg viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="2"/></svg> Stop</button>
+      <button class="btn btn-neu" id="btnRestart" data-act="restartServer" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 12a9 9 0 11-2.6-6.4L21 8"/><path d="M21 3v5h-5"/></svg> Restart</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="lb">Port</div><div class="vl">8787</div></div>
+      <div class="stat"><div class="lb">Tools Online</div><div class="vl" id="sTools">—</div></div>
+      <div class="stat"><div class="lb">Sessions Today</div><div class="vl" id="sUsers">—</div></div>
+      <div class="stat"><div class="lb">Tokens Today</div><div class="vl" id="sTokens">—</div></div>
+    </div>
+    <div class="log-box" id="logBox"></div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="ico">◉</span> Users <span id="onlineCount" style="margin-left:auto;font-size:11px;color:var(--sub);font-weight:500"></span></div>
+    <div style="overflow-y:auto;max-height:260px">
+      <table class="tbl">
+        <thead><tr><th>User</th><th>Status</th><th>IP Address</th><th>Region</th><th>Last Active</th></tr></thead>
+        <tbody id="userRows"><tr><td colspan="5" style="color:var(--sub);text-align:center;padding:20px">No active sessions</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<footer class="ft"><span>V-Fletch Local Console</span><span id="ftTime"></span></footer>
+<script>
+const API=location.origin;let running=false;
+/* 访问门禁：控制台使用独立会话（vfletch.console.*），不与主应用会话互通。
+   非主控身份（含未登录/管理员/成员）一律要求输入主控账号密码。 */
+const CK='vfletch.console.token';
+function gateShow(){document.body.classList.add('gated')}
+function gateHide(){document.body.classList.remove('gated')}
+async function gateVerify(){
+  const t=localStorage.getItem(CK)??'';
+  if(!t)return false;
+  try{
+    const r=await fetch(API+'/api/auth/me',{headers:{authorization:`Bearer ${t}`},signal:AbortSignal.timeout(5000)});
+    const d=await r.json();
+    if(d?.user?.role==='boss')return true;
+  }catch{}
+  localStorage.removeItem(CK);
+  return false;
+}
+async function gateLogin(){
+  const u=document.getElementById('gUser').value.trim();
+  const p=document.getElementById('gPass').value;
+  const err=document.getElementById('gErr');
+  err.style.display='none';
+  try{
+    const r=await fetch(API+'/api/auth/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({username:u,password:p})});
+    const d=await r.json();
+    if(d?.token&&d?.user?.role==='boss'){
+      localStorage.setItem(CK,d.token);
+      gateHide();check();users();
+    }else{
+      err.textContent=d?.error??'账号或密码错误';
+      err.style.display='block';
+    }
+  }catch(e){err.textContent='连接失败：'+e.message;err.style.display='block'}
+}
+(async()=>{
+  if(await gateVerify())return;
+  gateShow();
+  document.getElementById('gPass').addEventListener('keydown',e=>{if(e.key==='Enter')gateLogin()});
+})();
+function log(m,c=''){const b=document.getElementById('logBox');const d=document.createElement('div');d.className='log-line '+c;d.innerHTML=`<span class="ts">${new Date().toLocaleTimeString()}</span>${m}`;b.prepend(d);while(b.children.length>80)b.lastChild.remove()}
+async function api(p,o={}){const t=localStorage.getItem(CK)??'';return fetch(API+p,{...o,headers:{'content-type':'application/json',...(t?{authorization:`Bearer ${t}`}:{})}})}
+async function check(){try{const r=await fetch(API+'/api/health',{signal:AbortSignal.timeout(3000)});const d=await r.json();running=d.ok===true;document.getElementById('sTools').textContent=d.toolCount??'—'}catch{running=false}ui();if(running){stats();users()}}
+function ui(){const b=document.getElementById('stBadge');const t=document.getElementById('stText');b.className='hd-status '+(running?'on':'off');t.textContent=running?'Online':'Offline';document.getElementById('btnStart').disabled=running;document.getElementById('btnStop').disabled=!running;document.getElementById('btnRestart').disabled=!running}
+async function stats(){try{const r=await api('/api/rms/overview');if(!r.ok)return;const d=await r.json();document.getElementById('sTokens').textContent=(d.tokens?.today??0).toLocaleString();document.getElementById('sUsers').textContent=d.conversations?.today??0}catch{}}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c])}
+/* 在线判定：last_seen 为服务端每次鉴权请求刷新（主应用每 60s 心跳），3 分钟内视为在线 */
+const ONLINE_MS=3*60*1000;
+function fmtLocal(iso){const t=Date.parse(iso);if(!Number.isFinite(t))return String(iso);const d=new Date(t);const p=n=>String(n).padStart(2,'0');return `${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`}
+function isOnline(u){if(!u.lastSeen)return false;const t=Date.parse(u.lastSeen);return Number.isFinite(t)&&(Date.now()-t)<ONLINE_MS}
+async function users(){try{const r=await api('/api/admin/users');if(!r.ok)return;const list=await r.json();const rows=list.filter(u=>u.lastLoginIp||u.lastSeen).sort((a,b)=>(isOnline(b)-isOnline(a))||String(b.lastSeen??'').localeCompare(String(a.lastSeen??'')));const on=rows.filter(isOnline).length;const badge=document.getElementById('onlineCount');if(badge)badge.textContent=`${on} online / ${list.length} total`;document.getElementById('userRows').innerHTML=rows.length?rows.map(u=>`<tr><td style="font-weight:600">${esc(u.username)}${u.display_name&&u.display_name!==u.username?` <span style="color:var(--sub);font-weight:400">${esc(u.display_name)}</span>`:''}</td><td>${isOnline(u)?'<span class="pill on">● Online</span>':'<span class="pill off">○ Offline</span>'}</td><td class="mono">${esc(u.lastLoginIp??'—')}</td><td>${u.lastIpRegion?`<span class="region-tag">📍 ${esc(u.lastIpRegion)}</span>`:'—'}</td><td class="mono" title="${esc(u.lastSeen??'')}">${u.lastSeen?esc(fmtLocal(u.lastSeen)):'—'}</td></tr>`).join(''):'<tr><td colspan="5" style="color:var(--sub);text-align:center;padding:20px">No active sessions</td></tr>'}catch{}}
+async function startServer(){log('Starting server…');for(let i=0;i<30;i++){await new Promise(r=>setTimeout(r,1000));try{const r=await fetch(API+'/api/health',{signal:AbortSignal.timeout(2000)});if(r.ok){log('Server started','ok');check();return}}catch{}}log('Start timeout (30s)','err');check()}
+async function stopServer(){if(!confirm('Stop server? All clients will disconnect.'))return;log('Stopping…','warn');try{await api('/api/admin/shutdown',{method:'POST'})}catch{}setTimeout(check,4000)}
+async function restartServer(){if(!confirm('Restart server?'))return;log('Restarting…','warn');try{await api('/api/admin/shutdown',{method:'POST'})}catch{};for(let i=0;i<60;i++){await new Promise(r=>setTimeout(r,1000));try{const r=await fetch(API+'/api/health',{signal:AbortSignal.timeout(2000)});if(r.ok){log('Restarted','ok');check();return}}catch{}}log('Restart timeout','err');check()}
+setInterval(()=>{document.getElementById('ftTime').textContent=new Date().toLocaleString()},1000);
+/* CSP 下不允许内联 onclick：按钮统一经 data-act 绑定 */
+const ACTIONS={gateLogin,startServer,stopServer,restartServer};
+document.querySelectorAll('[data-act]').forEach(el=>el.addEventListener('click',()=>{const f=ACTIONS[el.dataset.act];if(typeof f==='function')f()}));
+check();setInterval(check,10000);setInterval(()=>{if(running){stats();users()}},30000);
+log('Console ready','ok');
+</script>
+</body>
+</html>
