@@ -4,7 +4,9 @@
 > 一条命令起服务，**不需要任何服务器、云端或联网授权校验**——除你自己配置的模型端点外没有外部依赖。
 
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-0.3.2-green.svg)](package.json)
 [![Node](https://img.shields.io/badge/node-%3E%3D22.5-brightgreen.svg)](#环境要求)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%E4%BC%98%E5%85%88-lightgrey.svg)](#已知边界)
 
 ---
 
@@ -17,6 +19,21 @@
 
 ---
 
+## 为什么需要它
+
+把 Agent 用起来，最常见的两条路各有硬伤：
+
+- **云端 SaaS Agent**：对话与工具执行都在别人服务器上跑——业务数据要出域、按用量计费、内网/离线环境接不进去，
+  过程难以留痕审计。对财务、审计、涉密等场景，这往往是一票否决项。
+- **从零自建本地 Agent**：流式协议、工具回合循环、MCP 子进程管理、上下文裁剪、多用户权限、审计留痕……
+  每一件都是要自己踩一遍的脏活，拼完还要长期维护。
+
+V-Fletch 把第二类脏活打包成一个**零云端依赖的 Node 单体**：数据库用 Node 内置 SQLite，数据落在你自己的磁盘；
+唯一的出网流量来自你自己配置的模型端点（以及你显式启用的远端 MCP）；开箱自带三级权限、登录限流与全量审计留痕。
+适合「想要 Agent 能力，但要求**数据在本机、过程可审计、离线可用**」的个人与团队。
+
+---
+
 ## 特性
 
 | 能力 | 说明 |
@@ -24,7 +41,10 @@
 | **模型无关** | 任意 OpenAI 兼容端点（DeepSeek / 智谱 GLM / Qwen / 本地 vLLM 等）；非兼容协议可写自定义 adapter（`server/adapters/custom.mjs`）。支持 `env:VAR_NAME` 引用密钥，不落盘明文。 |
 | **工具回合循环** | 模型 → 工具 → 模型 的多轮自动回路（`maxToolRounds` 默认 8 防死循环）；不支持 function calling 的模型自动降级为文本 JSON 协议。 |
 | **MCP 工具接入** | 连接 stdio / Streamable-HTTP 两类 MCP server；工具暴露为命名空间名 `<serverId>__<toolName>`，多 server 同名工具不冲突；带冲突诊断与连通性探测。 |
-| **内置工具 server** | 无 `config/mcp.json` 也能用：审计风控、联网检索、图像生成、本地代码执行、任务规划、记忆库等 in-process server。 |
+| **双引擎回合编排** | 默认引擎为 LangGraph.js StateGraph（`server/lib/chat-graph.mjs`）；`VFLETCH_AGENT_ENGINE=legacy` 可切回 `server/lib/chat.mjs` 旧回路，langgraph 依赖缺失时自动回退，事件协议不变。 |
+| **角色化工具视图** | 安全默认：非主控会话剥离系统只读工具，以及 MCP 安装/卸载与任意代码执行类工具（`server/main.mjs` 的 `toolViewFor` 过滤）。 |
+| **MCP 目录安装** | 除手写 `config/mcp.json` 外支持 `mcp_install` / `mcp_uninstall`；仓库附带零依赖的时间/时区 stdio server（`server/mcp-time-stdio.mjs`，目录条目 `id="time"`）。 |
+| **内置工具 server** | 无 `config/mcp.json` 也能用：审计风控、联网检索、图像生成、本地代码执行、任务规划、记忆库等 in-process server（`server/lib/builtin.mjs`：`web_search` Bing/DuckDuckGo 双引擎互备、`web_fetch`、`image_generate`、`code_run`、`todo_write`、`delegate_agent`、`memory_save/recall/search/forget`、`audit_*` 风控视图、`mcp_install/uninstall/list`、`db_query`/`db_schema`、`system_status`）。 |
 | **流式对话** | SSE 流式输出，含思考过程剥离、工具调用可视化、会话取消（浏览器主线程冻结也能送达停止指令）。 |
 | **知识库** | 企业共享知识库 + 上传/归档/恢复/清理。 |
 | **多用户与权限** | 主控 / 观察员 / 员工三级；scrypt 加盐哈希、32 字节随机会话 token、24h 过期。 |
@@ -92,7 +112,7 @@ npm run kit:local  # 生成 release/vfletch-local-kit/ 本地运行套件
 
 | 目录 / 文件 | 作用 |
 |---|---|
-| `server/` | **后端**。`main.mjs` 是 HTTP 入口（node:http，含全部 `/api/*` 路由）；`lib/` 为各功能模块；`adapters/` 为模型协议适配器；`cli.mjs` 为诊断 CLI。 |
+| `server/` | **后端**。`main.mjs` 是 HTTP 入口（node:http，含全部 `/api/*` 路由）；`lib/` 为各功能模块；`adapters/` 为模型协议适配器；`cli.mjs` 为诊断 CLI；`mcp-time-stdio.mjs` 为随附的零依赖时间/时区 MCP server。 |
 | `server/lib/` | 核心库：`chat.mjs`/`chat-graph.mjs` 回合编排、`mcp-manager.mjs` MCP 连接、`model.mjs` 模型客户端、`context.mjs` 上下文裁剪、`auth.mjs` 账号、`db.mjs` SQLite、`rms.mjs` 风控、`team.mjs` AI 员工、`memory.mjs` 记忆库、`subagent.mjs` 子代理等。 |
 | `server/adapters/` | 自定义模型协议适配器模板（`custom.mjs`）。 |
 | `server/audit/` | 审计视图用的**示例数据**（`audit-data.json`，来源见 `PROVENANCE.md`）。 |
@@ -105,6 +125,9 @@ npm run kit:local  # 生成 release/vfletch-local-kit/ 本地运行套件
 | `docs/` | **公开**文档（见下方文档索引）。 |
 | `brand/` | 品牌资源（图标、Logo 源文件、主题预览页）。 |
 | `launch.bat` / `stop.bat` | Windows 快捷启动/停止脚本。 |
+| `make-shortcuts.ps1` / `update-shortcuts.ps1` | Windows 快捷方式安装/更新脚本：在项目目录与桌面创建指向 `launch.bat` 的快捷方式。 |
+| `langgraph.json` | LangGraph 图声明（`chat` 图 → `server/lib/studio-graph.mjs#graph`，Node 22.5）。 |
+| `electron-builder.yml` | 桌面壳打包配置（Windows `dir`/`nsis` 目标；显式排除 `model.json`/`mcp.json`/`vfletch.db*` 等真实密钥与运行时数据）。 |
 | `package.json` | 依赖与脚本入口（`start` / `dev:web` / `build:web` / `app` / `kit:local` / `mcp:*` / `model:ping`）。 |
 | `LICENSE` | Apache License 2.0 全文。 |
 | `PROVENANCE.md` | **来源与合规声明**：独立开发声明、对齐范围披露、核验方法与未核验项。 |
@@ -216,8 +239,16 @@ server/main.mjs  (node:http)
   └─ /api/settings|usage|suggest|upload|image|meta|health
         ├─ lib/model.mjs        OpenAI 兼容 / custom adapter
         ├─ lib/mcp-manager.mjs  stdio/http MCP 连接、命名空间、冲突诊断
-        └─ lib/chat.mjs        回合循环：模型 → 工具 → 模型
+        ├─ lib/chat-graph.mjs   回合图引擎（LangGraph StateGraph，默认）
+        └─ lib/chat.mjs        legacy 回合循环（VFLETCH_AGENT_ENGINE=legacy 切换；依赖缺失自动回退）
 ```
+
+### 回合编排引擎
+
+对话回合默认由 **LangGraph.js StateGraph**（`server/lib/chat-graph.mjs`）驱动：模型 → 工具 → 模型 的多轮回路
+在图节点内推进，事件协议（`delta` / `reasoning` / `tool_call` / `tool_result` / `usage`）与旧引擎一致；
+`VFLETCH_AGENT_ENGINE=legacy` 可切回 `chat.mjs` 旧实现，langgraph 依赖缺失时自动回退。
+根目录 `langgraph.json` 另将 `chat` 图声明为 `server/lib/studio-graph.mjs#graph`。
 
 ### 工具命名规则
 
@@ -231,6 +262,7 @@ server/main.mjs  (node:http)
 - `config/model.json` 与 `config/mcp.json` 里的密钥都建议写 `"env:VAR_NAME"`，不落盘明文。
 - 读取配置时只返回 `hasApiKey` / `env` 引用，**密钥永不回传明文**；保存时空 `apiKey` = 保持原值。
 - `mcp:doctor` 会扫描 server 配置里疑似明文密钥并告警。
+- 桌面打包配置显式排除 `config/model.json`、`config/mcp.json`、`config/vfletch.db*` 等真实密钥与运行时数据（`electron-builder.yml`）。
 - 明文密钥**不要提交进仓库**；若不慎提交，请先轮换该密钥，再改为 `env:` 引用。
 
 ---
@@ -269,6 +301,17 @@ tools/loadtest.mjs             # 稳定性压测（零依赖）
 
 ---
 
+## 与相关项目 / 生态的关系
+
+- **MCP 生态**：作为 MCP 客户端，经官方 `@modelcontextprotocol/sdk` 接入任意第三方 MCP server（stdio / Streamable HTTP），
+  工具以 `<serverId>__<toolName>` 命名空间暴露；内置工具与 MCP 工具在同一回合循环内混用。
+- **模型供应商**：对接任意 OpenAI 兼容端点（配置模板含 DeepSeek / GLM / Qwen 示例）；本项目与任何模型厂商无隶属或背书关系。
+- **LangGraph.js**：默认回合编排引擎（`@langchain/langgraph`），可一键切回内置 legacy 回路，不锁定编排框架。
+- **独立实现**：代码为独立实现、未包含第三方受版权保护的源码；与公开分发的第三方桌面应用的渲染层对齐范围
+  已在 [`PROVENANCE.md`](PROVENANCE.md) 如实披露。
+
+---
+
 ## 合规与许可
 
 - **许可**：Apache License 2.0（见 [`LICENSE`](LICENSE)）。
@@ -284,6 +327,13 @@ tools/loadtest.mjs             # 稳定性压测（零依赖）
 
 ## 已知边界
 
+- **开发默认口令是公开的**（`vfletch-dev`，见 `server/lib/auth.mjs` 源码注释）：把服务暴露到本机之外或对多人
+  开放前，务必先设置 `VF_BOSS_P`，或首次登录后立即改密。
+- **Windows 优先**：快捷启动（`launch.bat`/`stop.bat`）、快捷方式脚本（`make-shortcuts.ps1`）与桌面打包
+  （`electron-builder.yml`；`npm run app:pack` 仅产出 Windows 目录包）面向 Windows；其余平台是纯 Node 理论可运行，
+  但未提供启动脚本、未经回归验证。
+- 默认（LangGraph）引擎下，工具结果进入模型上下文有截断上限（6000 字符，`server/lib/chat-graph.mjs`）；
+  完整内容仍落 SQLite 审计留痕。
 - 本机 Windows 示例 MCP server 用 `npx.cmd`（MCP SDK 在 Windows 下 spawn `npx` 会失败）。
 - 每个回合最多执行 `maxToolRounds` 轮工具调用（默认 8），防止模型死循环。
 - 不支持 function calling 的模型自动降级为 ```` ```tool JSON``` ```` 文本协议（见 `server/lib/model.mjs`）。
